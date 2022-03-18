@@ -1,0 +1,106 @@
+class List {
+    constructor() {
+        this.startNode = null;
+        this.lastNode = null;
+    }
+
+    add(name) {
+        const newNode = new Node(name, null);
+        if(this.startNode === null) {
+            this.startNode = newNode;
+            this.lastNode = newNode;
+        } else {
+            this.lastNode.nextNode = newNode;
+            this.lastNode = newNode;
+        }
+    }
+
+    delete(node) {
+        let currentNode = this.startNode;
+        let previousNode = null;
+        while (currentNode !== null && currentNode.name !== node.name) {
+            previousNode = currentNode;
+            currentNode = currentNode.nextNode;
+        }
+        if (currentNode !== null && currentNode.name === node.name) {
+            if(previousNode === null) {
+                this.startNode = currentNode.nextNode;
+            } else {
+                previousNode.nextNode = currentNode.nextNode;
+            }
+        }
+    }
+
+    values() {
+        let currentNode = this.startNode;
+        let nodeValues = [];
+        while(currentNode !== null) {
+            nodeValues.push(currentNode.name);
+            currentNode = currentNode.nextNode;
+        }
+        return nodeValues;
+    }
+
+    find(name) {
+        let currentNode = this.startNode;
+        while(currentNode !== null) {
+            if(currentNode.name === name) {
+                return currentNode;
+            }
+            currentNode = currentNode.nextNode;
+        }
+        return null;
+    }
+}
+
+class Node {
+    constructor(name, nextNode) {
+        this.name = name;
+        this.nextNode = nextNode;
+    }
+
+    value() {
+        return this.name;
+    }
+}
+
+function assert_nil(value) {
+    if (value === null) {
+        console.log(`Null assertion passed`);
+    } else {
+        console.log(`Null assertion failed: ${value} is not null`);
+    }
+}
+
+function assert_equal(value1, value2) {
+    if (value1 === value2) {
+        console.log(`Equality assertion passed`);
+    } else {
+        console.log(`Equality assertion failed: ${value1} is not equal to ${value2}`);
+    }
+}
+
+list = new List()
+assert_nil(list.find("fred"))
+list.add("fred")
+assert_equal("fred", list.find("fred").value())
+assert_nil(list.find("wilma"))
+list.add("wilma")
+assert_equal("fred",  list.find("fred").value())
+assert_equal("wilma", list.find("wilma").value())
+assert_equal(["fred", "wilma"], list.values())
+
+list = new List()
+list.add("fred")
+list.add("wilma")
+list.add("betty")
+list.add("barney")
+assert_equal(["fred", "wilma", "betty", "barney"], list.values())
+list.delete(list.find("wilma"))
+assert_equal(["fred", "betty", "barney"], list.values())
+list.delete(list.find("barney"))
+assert_equal(["fred", "betty"], list.values())
+list.delete(list.find("fred"))
+assert_equal(["betty"], list.values())
+list.delete(list.find("betty"))
+assert_equal([], list.values())
