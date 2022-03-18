@@ -27,6 +27,9 @@ class List {
                 this.startNode = currentNode.nextNode;
             } else {
                 previousNode.nextNode = currentNode.nextNode;
+                if (currentNode.nextNode === null) {
+                    this.lastNode = previousNode;
+                }
             }
         }
     }
